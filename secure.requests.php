@@ -88,12 +88,6 @@ class SecureRequests {
 			}
 		}
 	}
-
-	private function filterItems($item) {
-		foreach($item as $key => $val) {
-			$item[$key] = htmlspecialchars($val, ENT_QUOTES, "UTF-8");
-		}
-	}
 	/**
 	* validateCSRF
 	* This function performs the validation of the CSRF token against the session
@@ -190,18 +184,3 @@ class SecureRequests {
 	}
 }
 ?>
-
-<?php
-session_start();
-$sr = new SecureRequests();
-$sr->safeRequest();
-$val = '';
-if(isset($_POST['test_field'])) {
-    $val = $_POST['test_field'];
-}
-?>
-<form method="POST" action="secure.requests.php">
-<?php $sr->protectForm('test_post', ''); ?>
-<input type="text" value="<?php echo $val;?>" name="test_field" />
-<input type="submit" value="Go" />
-</form>
