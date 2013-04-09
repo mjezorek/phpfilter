@@ -32,4 +32,4 @@
 
 
 ### Disclaimer
-None of this shit works, but it might be cool too look at, the code is ugly as well and idgaf.
+None of this shit works, but it might be cool to look at, the code is ugly as well and idgaf.
