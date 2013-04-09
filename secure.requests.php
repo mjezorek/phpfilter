@@ -67,22 +67,31 @@ class SecureRequests {
 			// we can move forward with the form now and clean it up because we have tested for CSRF.
 			// detect if the field names have been tampered with
 			if($_SERVER['REQUEST_METHOD'] == 'POST') {
+				$fieldsToIgnore = array();
 				if(!isset($_POST['do_not_filter']) || $_POST['do_not_filter_token'] !== hash_hmac('sha256', $_POST['do_not_filter'], $this->securityKey)) {
 					$this->securityLog("LOG: Do not filter was not existant or tampered with. We are filtering all fields");
 				} else {
 					$fieldsToIgnore = explode(',', $_POST['do_not_filter']);
-					foreach($_POST as $key => $val) {
-						if(!in_array($key, $fieldsToIgnore)) {
-							$_POST[$key] =  htmlspecialchars($val, ENT_QUOTES, "UTF-8");
-							$_REQUEST[$key] = htmlspecialchars($val, ENT_QUOTES, "UTF-8");
-						}
+				}
+				foreach($_POST as $key => $val) {
+					if(!in_array($key, $fieldsToIgnore)) {
+						$_POST[$key] =  htmlspecialchars($val, ENT_QUOTES, "UTF-8");
+						$_REQUEST[$key] = htmlspecialchars($val, ENT_QUOTES, "UTF-8");
+					}
+				}
+				foreach($_GET as $key => $val) {
+					if(!in_array($key, $fieldsToIgnore)) {
+						$_GET[$key] =  htmlspecialchars($val, ENT_QUOTES, "UTF-8");
+						$_REQUEST[$key] = htmlspecialchars($val, ENT_QUOTES, "UTF-8");
 					}
 				}
 			}
-			foreach($_GET as $key => $val) {
-				$_GET[$key] = htmlspecialchars($val, ENT_QUOTES, "UTF-8");
-				$_REQUEST[$key] = htmlspecialchars($val, ENT_QUOTES, "UTF-8");
-			}
+		}
+	}
+
+	private function filterItems($item) {
+		foreach($item as $key => $val) {
+			$item[$key] = htmlspecialchars($val, ENT_QUOTES, "UTF-8");
 		}
 	}
 	/**
@@ -181,3 +190,18 @@ class SecureRequests {
 	}
 }
 ?>
+
+<?php
+session_start();
+$sr = new SecureRequests();
+$sr->safeRequest();
+$val = '';
+if(isset($_POST['test_field'])) {
+    $val = $_POST['test_field'];
+}
+?>
+<form method="POST" action="secure.requests.php">
+<?php $sr->protectForm('test_post', ''); ?>
+<input type="text" value="<?php echo $val;?>" name="test_field" />
+<input type="submit" value="Go" />
+</form>
