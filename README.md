@@ -25,7 +25,7 @@ if(isset($_POST['test_field'])) {
 	$val = $_POST['test_field'];
 }
 ?>
-<form method="POST" action="form.security.php">
+<form method="POST" action="/omgzors">
 <?php $sr->protectForm('test_post', ''); ?>
 <input type="text" value="<?php echo $val;?>" name="test_field" />
 <input type="submit" value="Go" />
