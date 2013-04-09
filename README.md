@@ -14,9 +14,8 @@
  Securely disable filtering for fields of your choice. 
 
 ### Example
-
+`
 <?php
-// THIS IS ALL DEMO CODE AND SHOULD BE REMOVED WHEN YOU DEPLOY THIS CLASS.
 session_start();
 $sr = new SecureRequests();
 $sr->safeRequest();
@@ -30,6 +29,7 @@ if(isset($_POST['test_field'])) {
 <input type="text" value="<?php echo $val;?>" name="test_field" />
 <input type="submit" value="Go" />
 </form>
+`
 
 ### Disclaimer
 None of this shit works, but it might be cool too look at, the code is ugly as well and idgaf.
